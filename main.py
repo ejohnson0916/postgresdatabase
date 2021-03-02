@@ -11,11 +11,52 @@ import spotify_token as st
 
 # not sure why I need database location at the moment might change to my postgres database
 DATABASE_LOCATION = "sqlite:///my_played_tracks.sqlite"
-#Spotify username
+# Spotify username
 USER_NAME = "1269375672"
 # token from https://developer.spotify.com/console/get-recently-played/?limit=50&after=1484811043509&before=
-TOKEN = 'BQAxkFEh_FTBpyhF1Lj1hQKtEScpW6JFdd0Ci09FOIw88cj-EJ0FpxDCTvwMD2WBYysOvWQQv_01kLTiULD4yiDBVNp_hbeX9GmpadrI0Odhf8JMRPMKumLiBFcEUa-BPfyg2CqZs0Zj2x6b1-NU'
+TOKEN = 'BQBgbbze0EuHoOZgOkC85I2SkzguFsOWloQ_orhS9tS21YurHafs9zlFrNOG9dVA-XNci3pWsD_1wyzSG-FK7i1rRN_8gNE5V8UKugtXopE8_3y6bn9wS35X_VZ7In7sxANoJJ4njUj88hi4wTuZ'
 
+
+# Function to validate data. This is the "L" (Load) part of ETL
+# Loading is not importing or exporting data its validation. According to Karolina Sowinska.
+
+# docstring that says the input of this function should be a dataframe
+def check_if_valid_data(
+        df: pd.DataFrame) -> bool:  # -> adds docstring that says the function should return a boolean value.
+
+    # Check if dataframe is empty
+    if df.empty:
+        print("The dataframe is empty! Likely no songs downloaded")
+        return False
+
+    # Primary Key: Played_at
+    # Primary key constraint, all primary keys must be different.
+    # If violated duplicates
+    if pd.Series(df['played_at']).is_unique:
+        pass
+    else:
+        raise Exception('Primary key constraint violated')
+
+    # Check for NULL values
+    # NULL values are objects that cant be used in mathematical computation
+    # Whereas NAs are floats that can be used in computation
+    if df.isnull().values.any():
+        Exception("NULL Values")
+
+    # In this case we only want data from the last 24 hours
+    # Ensure data is not older than 24 hours
+    yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
+    yesterday = yesterday.replace(hour=0, minute=0, microsecond=0)
+    print(yesterday)
+
+    timestamps = df['timestamp'].astype(str).tolist()
+    for timestamp in timestamps:
+        # Use strptime to format date_strings in a certain format
+        if datetime.datetime.strptime(timestamp, "%Y-%m-%d") <= yesterday:
+            print(timestamp)
+            raise Exception("At least one of the returned strings is not within the designated timeframe (yesterday")
+
+    return True
 # Authorization is where the token goes, Not sure what Accept and Content Type args do
 header = {
     'Accept': 'application/json',
@@ -33,7 +74,9 @@ yesterday = today - datetime.timedelta(days=1)
 # Jan 1970 ), Javascript "Data" object expects the number of milliseconds since the epoch, Hence multiply by 1000
 yesterday_unix_timestamp = int(yesterday.timestamp()) * 1000
 
-r = requests.get('https://api.spotify.com/v1/me/player/recently-played?after{time}'.format(time=yesterday_unix_timestamp), headers=header)
+r = requests.get(
+    'https://api.spotify.com/v1/me/player/recently-played?after{time}'.format(time=yesterday_unix_timestamp),
+    headers=header)
 data = r.json()
 
 # Lists that will be merged for a dataframe
@@ -68,7 +111,6 @@ song_dict = {
 # Put it all into a dataframe
 song_df = pd.DataFrame(song_dict)
 
-song_df.info()
-
-print(song_df.head(15))
-
+# Validate
+if check_if_valid_data(song_df):
+    print("Data valid, proceed to load stage")
