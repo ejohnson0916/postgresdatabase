@@ -14,7 +14,7 @@ DATABASE_LOCATION = "sqlite:///my_played_tracks.sqlite"
 # Spotify username
 USER_NAME = "1269375672"
 # token from https://developer.spotify.com/console/get-recently-played/?limit=50&after=1484811043509&before=
-TOKEN = 'BQBgbbze0EuHoOZgOkC85I2SkzguFsOWloQ_orhS9tS21YurHafs9zlFrNOG9dVA-XNci3pWsD_1wyzSG-FK7i1rRN_8gNE5V8UKugtXopE8_3y6bn9wS35X_VZ7In7sxANoJJ4njUj88hi4wTuZ'
+TOKEN = 'BQC3d1cCmDaPhApCFQJPDM2H8YRt5lBCbfg29VgXjREEHWM0UzaNvP9dwkbjUBmnSEYT8s2dVpV4v5ibJyEX690Njy5C6zVPXhyPSRYqj8Rvn5ycv0YZnk3Slkg2JRKQ4n1x9W_jid9JHmz_8TJh'
 
 
 # Function to validate data. This is the "L" (Load) part of ETL
@@ -54,9 +54,11 @@ def check_if_valid_data(
         # Use strptime to format date_strings in a certain format
         if datetime.datetime.strptime(timestamp, "%Y-%m-%d") <= yesterday:
             print(timestamp)
-            raise Exception("At least one of the returned strings is not within the designated timeframe (yesterday")
+            raise Exception("At least one of the returned strings is not within the designated timeframe (yesterday)")
 
     return True
+
+
 # Authorization is where the token goes, Not sure what Accept and Content Type args do
 header = {
     'Accept': 'application/json',
@@ -65,14 +67,14 @@ header = {
 }
 
 # Get today's date and time
-today = datetime.datetime.now()
+today_ = datetime.datetime.now()
 
 # We want what I listened to yesterday so subtract the date/time right now by one day to get past 24hrs
-yesterday = today - datetime.timedelta(days=1)
+yesterday_ = today_ - datetime.timedelta(days=1)
 
 # Convert to unix format because that is what the Spotify API is in Unixtimne - number of seconds since epoch  ( 1
 # Jan 1970 ), Javascript "Data" object expects the number of milliseconds since the epoch, Hence multiply by 1000
-yesterday_unix_timestamp = int(yesterday.timestamp()) * 1000
+yesterday_unix_timestamp = int(yesterday_.timestamp()) * 1000
 
 r = requests.get(
     'https://api.spotify.com/v1/me/player/recently-played?after{time}'.format(time=yesterday_unix_timestamp),
@@ -110,6 +112,8 @@ song_dict = {
 
 # Put it all into a dataframe
 song_df = pd.DataFrame(song_dict)
+
+print(song_df.tail(10))
 
 # Validate
 if check_if_valid_data(song_df):
