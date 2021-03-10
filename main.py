@@ -14,7 +14,7 @@ DATABASE_LOCATION = "sqlite:///my_played_tracks.sqlite"
 # Spotify username
 USER_NAME = "1269375672"
 # token from https://developer.spotify.com/console/get-recently-played/?limit=50&after=1484811043509&before=
-TOKEN = 'BQC3d1cCmDaPhApCFQJPDM2H8YRt5lBCbfg29VgXjREEHWM0UzaNvP9dwkbjUBmnSEYT8s2dVpV4v5ibJyEX690Njy5C6zVPXhyPSRYqj8Rvn5ycv0YZnk3Slkg2JRKQ4n1x9W_jid9JHmz_8TJh'
+TOKEN = ''
 
 
 # Function to validate data. This is the "L" (Load) part of ETL
