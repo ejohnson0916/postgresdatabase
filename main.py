@@ -18,7 +18,7 @@ DATABASE_LOCATION = "postgresql+psycopg2://"
 # Spotify username
 USER_NAME = "1269375672"
 # token from https://developer.spotify.com/console/get-recently-played/?limit=50&after=1484811043509&before=
-TOKEN = 'BQAwnCEb1_1auC2w9rI050Kou5VZRKXrGxlxVzqaYU8EdABXWMtkMzPw7b_qhT_vzRCzC6fFGbnNVUKWbOXBdhu879EjVqODEUaA5AbgbRCA6t9vgq-t-7AssP2qLl4PCwS2PVYoNbK2a1JAiuMthlUxFnTBPmQ'
+TOKEN = ''
 
 # Function to validate data. This is the "L" (Load) part of ETL
 # Loading is not importing or exporting data its validation.
