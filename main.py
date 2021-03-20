@@ -18,11 +18,10 @@ DATABASE_LOCATION = "postgresql+psycopg2://"
 # Spotify username
 USER_NAME = "1269375672"
 # token from https://developer.spotify.com/console/get-recently-played/?limit=50&after=1484811043509&before=
-TOKEN = '<token>'
-
+TOKEN = 'BQAwnCEb1_1auC2w9rI050Kou5VZRKXrGxlxVzqaYU8EdABXWMtkMzPw7b_qhT_vzRCzC6fFGbnNVUKWbOXBdhu879EjVqODEUaA5AbgbRCA6t9vgq-t-7AssP2qLl4PCwS2PVYoNbK2a1JAiuMthlUxFnTBPmQ'
 
 # Function to validate data. This is the "L" (Load) part of ETL
-# Loading is not importing or exporting data its validation. According to Karolina Sowinska.
+# Loading is not importing or exporting data its validation.
 
 # docstring that says the input of this function should be a dataframe
 def check_if_valid_data(
@@ -135,8 +134,8 @@ if check_if_valid_data(song_df):
 database = ''
 username = ''
 password = ''
-host = ''
-port = ''
+host = 'eanj.cnsiydz9iplc.us-east-2.rds.amazonaws.com'
+port = '5432'
 
 # Formula dialect_driver://<username>{0}:<password>{1}@<host>:<port>/database
 engine = sqlalchemy.create_engine('postgresql+psycopg2://{0}:{1}@{2}:{3}/{4}'.format(username, password, host, port, database))
@@ -147,7 +146,9 @@ spotify = Table('spotify', metadata,
                 Column('song_name', String(255)),
                 Column('artist_name', String(255)),
                 Column('timestamp', Date()),
-                Column('played_at', String(255), primary_key=True))
+                Column('played_at', String(255), primary_key=True, unique=True))
 
 metadata.create_all(engine)
-print(engine.table_names())
+
+# Insert Data into Database!
+song_df.to_sql(name='spotify', con=connection, if_exists='replace')
