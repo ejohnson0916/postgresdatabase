@@ -9,7 +9,6 @@ import json
 from datetime import datetime
 import datetime
 import sqlite3
-import spotify_token as st
 from sqlalchemy import create_engine
 
 # not sure why I need database location at the moment might change to my postgres database
@@ -18,7 +17,7 @@ DATABASE_LOCATION = "postgresql+psycopg2://"
 # Spotify username
 USER_NAME = "1269375672"
 # token from https://developer.spotify.com/console/get-recently-played/?limit=50&after=1484811043509&before=
-TOKEN = ''
+TOKEN = 'BQBWFxdDFo1RVhuCA9xTNpFZR3-S4JRQXJsrzkPZHHEqO7W8X3YTNSIPhfEmMYOfz8fXJ7waoDfgpV-FNnWH0wyrybBfzipid-jQQMIgebblN8shhb3z4gPg2mil_p6qpX_xlS9tcHJc9PqefQA_n_GlJnAE3fA'
 
 # Function to validate data. This is the "L" (Load) part of ETL
 # Loading is not importing or exporting data its validation.
