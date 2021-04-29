@@ -17,7 +17,7 @@ DATABASE_LOCATION = "postgresql+psycopg2://"
 # Spotify username
 USER_NAME = "1269375672"
 # token from https://developer.spotify.com/console/get-recently-played/?limit=50&after=1484811043509&before=
-TOKEN = 'BQBWFxdDFo1RVhuCA9xTNpFZR3-S4JRQXJsrzkPZHHEqO7W8X3YTNSIPhfEmMYOfz8fXJ7waoDfgpV-FNnWH0wyrybBfzipid-jQQMIgebblN8shhb3z4gPg2mil_p6qpX_xlS9tcHJc9PqefQA_n_GlJnAE3fA'
+TOKEN = ''
 
 # Function to validate data. This is the "L" (Load) part of ETL
 # Loading is not importing or exporting data its validation.
@@ -130,7 +130,7 @@ if check_if_valid_data(song_df):
 
 # Connect Python to AWS Postgres database
 
-database = ''
+database = 'eanj'
 username = ''
 password = ''
 host = 'eanj.cnsiydz9iplc.us-east-2.rds.amazonaws.com'
